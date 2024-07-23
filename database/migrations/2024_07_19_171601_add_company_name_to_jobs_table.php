@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->string('company_name')->index();
+            $table->string('company_name')->index(); // solaris
+
+            // $table->foreignId('user_id')->constrained();
         });
     }
 
@@ -23,6 +25,7 @@ return new class extends Migration
     {
         Schema::table('jobs', function (Blueprint $table) {
             $table->dropColumn('company_name');
+            // $table->dropForeignId('user_id');
         });
     }
 };

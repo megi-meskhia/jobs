@@ -9,6 +9,7 @@ class JobApplication extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['username', 'letter', 'email',  'resume', 'job_id'];
+    protected $fillable = ['', 'letter', '',  'resume', 'job_id'];
 
+    // relations user_id, job_id
 }

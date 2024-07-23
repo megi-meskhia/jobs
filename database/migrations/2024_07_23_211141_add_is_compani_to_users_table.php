@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->renameColumn('logo', 'image');
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('is_compani')->default(false);
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->renameColumn('image', 'logo');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('is_compani');
         });
     }
 };

@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->timestamp('created_at')->nullable()->after('published_at');
-            $table->timestamp('updated_at')->nullable()->after('created_at');
+            $table->timestamps();
         });
     }
 
@@ -23,7 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->dropColumn(['created_at', 'updated_at']);
+            // $table->dropColumn(['created_at', 'updated_at']);
+            $table->dropTimestamps();
         });
     }
 };

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->integer('salary')->nullable();
             $table->string('logo');
-            $table->timestamp('available_at');
-            $table->timestamp('published_at')->nullable();
+            $table->timestamp('available_at'); // available_till, can_apply_till active_till_date
+            $table->timestamp('published_at')->nullable(); // არ არის საჭირო, ამ როლს შეასრულებს created_at
             
             // $table->string('queue')->index();
             // $table->longText('payload');

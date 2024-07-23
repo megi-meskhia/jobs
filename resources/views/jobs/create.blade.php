@@ -49,7 +49,7 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="available_at">Available At</label>
-                    <input type="date" name="available_at" class="form-control" value="{{ old('available_at', $job->available_at ? $job->available_at->format('Y-m-d') : '') }}">
+                    <input type="date" name="available_at" class="form-control" value="{{ old('available_at', '') }}">
                 </div>
                 <div class="form-group mb-4">
                     <label for="logo">Company Logo</label>
