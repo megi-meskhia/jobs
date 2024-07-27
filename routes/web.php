@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route; 
 
 Route::get('/', function () {
@@ -26,7 +27,7 @@ Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])->name('jobs.edit'
 Route::put('/jobs/{job}', [JobController::class, 'update'])->name('jobs.update');
 Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.delete');
 
-Route::get('/jobs/profile', [ProfileController::class, 'profile']);
+Route::get('/jobs/user_profile/{id}', [UserProfileController::class, 'show'])->name('user_profile');
 
 Route::get('/jobs/{job}/apply', [JobController::class, 'apply'])->name('jobs.apply');
 Route::post('/jobs/store-application', [JobController::class, 'storeApplication'])->name('jobs.storeApplication');

@@ -1,4 +1,4 @@
-@extends('jobs.layout')
+@extends('layouts.app')
 @section('content')
 
 @section('title')
@@ -12,7 +12,7 @@
             <th></th>
             <th scope="col">Jobs</th>
             <th scope="col">Published</th>
-            <th scope="col">Available</th>
+            <th scope="col">Available Till</th>
         </tr>
     </thead>
     <tbody>
@@ -21,10 +21,10 @@
             <td style='width:50px'>
                 <img src="{{ asset('storage/' . $job['logo']) }}" class="card-img-top px-2" style="width:100px;height:50px;object-fit:contain;">
             </td>
-            <td>{{$job['company_name']}}</td>
+            <td style="font-weight:bold">{{$job->user->name}}</td>
             <td>{{$job['title']}}</td>
             <td>{{ \Carbon\Carbon::parse($job['created_at'])->format('Y-m-d') }}</td>
-            <td>{{ \Carbon\Carbon::parse($job['avalable_at'])->format('Y-m-d') }}</td>
+            <td>{{ \Carbon\Carbon::parse($job['available_till'])->format('Y-m-d') }}</td>
             <td>
                 <a href="{{ route('jobs.show', [$job['id']]) }}" class="btn text-primary p-0 mr-3">
                     <span>Details</span>

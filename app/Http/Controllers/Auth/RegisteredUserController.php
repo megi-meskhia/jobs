@@ -33,14 +33,14 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'is_compani' => ['nullable', 'boolean'],
+            'account_type' => ['required', 'in:company,person'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'is_compani' => isset($data['is_compani']) ? true : false,
+            'account_type' => $request->account_type
         ]);
 
         event(new Registered($user));

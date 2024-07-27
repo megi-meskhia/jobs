@@ -20,10 +20,7 @@
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
@@ -32,19 +29,32 @@
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <!-- Is Company Checkbox -->
+        <!-- Is Company or Is Person Radio Buttons -->
         <div class="mt-4">
-            <x-input-label for="is_compani" :value="__('Register as a company')" />
-            <x-checkbox id="is_compani" class="block mt-1" name="is_compani" :checked="old('is_compani')" />
-            <x-input-error :messages="$errors->get('is_compani')" class="mt-2" />
+            <x-input-label :value="__('Register as')" />
+            <div class="mt-1" style="display:flex;">
+                <div class="mr-4">
+                    <label for="is_person" class="inline-flex items-center">
+                        <input id="is_person" type="radio" name="account_type" value="person" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" {{ old('account_type') == 'person' ? 'checked' : '' }}>
+                        <span class="ml-2 text-sm text-gray-600">{{ __('Person') }}</span>
+                    </label>
+
+                </div>
+                <div>
+                    <label for="is_company" class="inline-flex items-center">
+                        <input id="is_company" type="radio" name="account_type" value="company" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" {{ old('account_type') == 'company' ? 'checked' : '' }}>
+                        <span class="ml-2 text-sm text-gray-600">{{ __('Company') }}</span>
+                    </label>
+                </div>
+            </div>
+            <x-input-error :messages="$errors->get('account_type')" class="mt-2" />
         </div>
+
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">

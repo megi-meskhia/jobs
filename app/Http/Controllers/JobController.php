@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use App\Models\JobApplication;
+use App\Rules\Logo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class JobController extends Controller
 
@@ -24,7 +27,8 @@ class JobController extends Controller
      */
     public function create()
     {
-        return view('jobs.create');
+        $user = Auth::user();
+        return view('jobs.create', ['user' => $user]);
     }
 
     /**
@@ -34,11 +38,10 @@ class JobController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:100',
-            'company_name' => 'required|string|max:100',
-            'description' => 'nullable|string|max:1000',
+            'description' => 'nullable|string|max:10000',
             'salary' => 'required|numeric|max:1000000',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'available_at' => 'required|date'
+            'available_till' => 'required|date'
         ]);
 
         if ($request->hasFile('logo')) {
@@ -49,14 +52,14 @@ class JobController extends Controller
 
         Job::create([
             'title' => $validated['title'],
-            'company_name' => $validated['company_name'],
             'description' => $validated['description'],
             'salary' => $validated['salary'] * 100,
             'logo' => $validated['logo'],
-            'available_at' => $validated['available_at']
+            'available_till' => $validated['available_till'],
+            'user_id' => Auth::id()
         ]);
 
-        return redirect('/jobs')->with('add_successful', 'Job was Created');
+        return redirect("/jobs/user_profile/" . auth()->id())->with('edit_successful', 'Job was Created');
     }
 
     /**
@@ -64,6 +67,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
+        $job->load('user');
         return view('jobs.show', ['job' => $job]);
     }
 
@@ -72,6 +76,7 @@ class JobController extends Controller
      */
     public function edit(Job $job)
     {
+        $job->load('user');
         return view('jobs.edit', ['job' => $job]);
     }
 
@@ -82,23 +87,33 @@ class JobController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:100',
-            'company_name' => 'required|string|max:100',
             'description' => 'nullable|string|max:10000',
             'salary' => 'required|numeric|max:1000000',
-            // 'logo' => 'required|logo|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'available_at' => 'required|date'
+            'logo' => 'nullable', new Logo, 'mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'available_till' => 'required|date'
         ]);
+
+        if ($request->hasFile('logo')) {
+            // Delete the old logo file
+            if ($job->logo) {
+                Storage::disk('public')->delete($job->logo);
+            }
+            // Store the new logo file
+            $validated['logo'] = $request->file('logo')->store('logos', 'public');
+        } else {
+            // Keep the existing logo if no new logo is uploaded
+            $validated['logo'] = $job->logo;
+        }
 
         $job->update([
             'title' => $validated['title'],
-            'company_name' => $validated['company_name'],
             'description' => $validated['description'],
             'salary' => $validated['salary'] * 100,
-            // 'logo' => $validated['logo'],
-            'available_at' => $validated['available_at']
+            'logo' => $validated['logo'],
+            'available_till' => $validated['available_till']
         ]);
 
-        return redirect('/jobs')->with('edit_successful', 'Job was Edited');
+        return redirect("/jobs/user_profile/" . auth()->id())->with('edit_successful', 'Job was Edited');
     }
 
     /**
@@ -106,11 +121,22 @@ class JobController extends Controller
      */
     public function destroy(Job $job)
     {
+        // Check if the job has a logo
+        if ($job->logo) {
+            // Check if the file exists
+            if (Storage::disk('public')->exists($job->logo)) {
+                // Attempt to delete the file
+                Storage::disk('public')->delete($job->logo);
+            } else {
+                // Debug: file does not exist
+                dd('File does not exist: ' . $job->logo);
+            }
+        }
+
         $job->delete();
 
         // TODO delete job photos
-
-        return redirect('/jobs')->with('edit_delete', 'Job was Deleted');
+        return redirect("/jobs/user_profile/" . auth()->id())->with('edit_delete', 'Job was Deleted');
     }
 
     public function apply($job)

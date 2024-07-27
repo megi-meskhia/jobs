@@ -11,6 +11,12 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
+    }
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,8 +24,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'password',
+        'email', 
+        'password', 
+        'account_type'
     ];
 
     /**
@@ -42,6 +49,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'account_type' => 'string',
         ];
     }
 }

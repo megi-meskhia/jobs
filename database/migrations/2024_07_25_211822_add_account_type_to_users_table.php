@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->dropColumn('published_at');
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('account_type', ['company', 'person'])->default('person');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->timestamp('published_at')->nullable()->after('available_at');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('account_type');
         });
     }
 };

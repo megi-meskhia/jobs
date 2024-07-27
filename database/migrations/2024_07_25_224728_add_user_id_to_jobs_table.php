@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_compani')->default(false);
+        Schema::table('jobs', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained();
         });
     }
 
-    /**
+    /** 
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_compani');
+        Schema::table('jobs', function (Blueprint $table) {
+            $table->dropForeignId('user_id');
         });
     }
 };
