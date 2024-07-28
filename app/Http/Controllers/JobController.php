@@ -139,31 +139,29 @@ class JobController extends Controller
         return redirect("/jobs/user_profile/" . auth()->id())->with('edit_delete', 'Job was Deleted');
     }
 
-    public function apply($job)
+    public function apply(Job $job)
     {
-        return view('jobs.apply', ['job' => $job]);
+        $user = Auth::user();
+        return view('jobs.apply', ['job' => $job, 'user' => $user]);
     }
 
-    public function storeApplication(Request $request)
+    public function storeApplication(Request $request, Job $job)
     {
         $validated = $request->validate([
-            'job_id' => 'required|exists:jobs,id',
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|max:255',
             'letter' => 'required|string|max:1000',
             'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'job_id' => 'required|exists:jobs,id'
         ]);
 
-        // $resumePath = $request->file('resume')->store('resumes', 'public');
+        $resumePath = $request->file('resume')->store('resumes', 'public');
 
         JobApplication::create([
-            'job_id' => $validated['job_id'],
-            'name' => $validated['name'],
-            'email' => $validated['email'],
             'letter' => $validated['letter'],
             'resume' => $validated['resume'],
+            'user_id' => Auth::id(),
+            'job_id' => $validated['job_id']
         ]);
 
-        return redirect('/jobs')->with('apply_successful', 'Application submitted successfully.');
+        return redirect("/jobs/user_profile/" . auth()->id())->with('edit_successful', 'Application submitted successfully.');
     }
 }

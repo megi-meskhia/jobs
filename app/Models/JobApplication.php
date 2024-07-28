@@ -9,7 +9,15 @@ class JobApplication extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['', 'letter', '',  'resume', 'job_id'];
+    protected $fillable = ['user_id', 'job_id', 'letter',  'resume'];
 
-    // relations user_id, job_id
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
