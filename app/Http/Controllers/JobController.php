@@ -153,7 +153,7 @@ class JobController extends Controller
             'job_id' => 'required|exists:jobs,id'
         ]);
 
-        $resumePath = $request->file('resume')->store('resumes', 'public');
+        $resumePath = $request->file('resume')->store('resumes', 'local');
 
         JobApplication::create([
             'letter' => $validated['letter'],

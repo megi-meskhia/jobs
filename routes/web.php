@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route; 
 
@@ -31,5 +32,7 @@ Route::get('/jobs/user_profile/{id}', [UserProfileController::class, 'show'])->n
 
 Route::get('/jobs/{job}/apply', [JobController::class, 'apply'])->name('jobs.apply');
 Route::post('/jobs/store-application', [JobController::class, 'storeApplication'])->name('jobs.storeApplication');
+Route::get('/download-resume/{filename}', [ResumeController::class, 'download'])->name('resume.download');
+
 
 require __DIR__.'/auth.php';
